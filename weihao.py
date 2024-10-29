@@ -1,6 +1,6 @@
-# import matplotlib.pyplot as plt
-# import seaborn as sns
-
+#import matplotlib.pyplot as plt
+#import seaborn as sns
+import math
 
 def read_student_data(file_path):
     students_list = []
@@ -70,9 +70,12 @@ team_size = 5
 
 group_division.extend(division_into_team(pick_student(students, tutorial_grp), team_size))
 
-import math
 
-def see_group_division(group_division):
+def visualize_data(group_division):
+    total_sd = []
+    total_deviations = []
+    compiled_z_score = []
+
     for i, x in enumerate(group_division):
         print(f"Group {i}")
         total_cgpa = 0
@@ -81,14 +84,22 @@ def see_group_division(group_division):
             print(j["Student ID"], j["School"], j["CGPA"])
             total_cgpa += j["CGPA"]
             icgpa.append(j["CGPA"])
+
         mean = total_cgpa / 5
         deviations = [(each-mean)**2 for each in icgpa]
         variance = sum(deviations) / 5
         sd = math.sqrt(variance)
+        total_sd.append(sd)
+        total_deviations.extend(deviations)
+
         print(f"The mean cgpa of this group is {mean}\nThe variance of this group is {variance:.5f}\nThe standard deviation of this group is {sd:.5f}")
         print()
-        
-see_group_division(group_division)
+
+    for eachd, eachsd in total_deviations, total_sd:
+        z_score = eachd / eachsd
+        compiled_z_score.append(z_score)
+
+    print (f"compiled z score list: {compiled_z_score}")
 
 # while tutorial_grp <= 150:
 #     group_division.extend(division_into_teams(students, tutorial_grp, team_size))
