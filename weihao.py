@@ -63,29 +63,14 @@ def division_into_team(students_list, size):
 
     return teams
 
-def variance_calculator(cGPA):
-    # Total number of students in the group
-    n = len(cGPA)
-    # Mean of the data
-    mean = sum(cGPA) / n
-    # square deviations
-    deviations = [(x-mean)**2 for x in cGPA]
-    variance = sum(deviations) / n
-    return variance
-
-import math
-
-def sd_calculator(cGPA):
-    var = variance_calculator(cGPA)
-    sd = math.sqrt(var)
-    return sd
-
 students = read_student_data('records.csv')
 group_division = []
 tutorial_grp = 1
 team_size = 5
 
 group_division.extend(division_into_team(pick_student(students, tutorial_grp), team_size))
+
+import math
 
 def see_group_division(group_division):
     for i, x in enumerate(group_division):
@@ -102,10 +87,8 @@ def see_group_division(group_division):
         sd = math.sqrt(variance)
         print(f"The mean cgpa of this group is {mean}\nThe variance of this group is {variance:.5f}\nThe standard deviation of this group is {sd:.5f}")
         print()
-
-
+        
 see_group_division(group_division)
-
 
 # while tutorial_grp <= 150:
 #     group_division.extend(division_into_teams(students, tutorial_grp, team_size))
