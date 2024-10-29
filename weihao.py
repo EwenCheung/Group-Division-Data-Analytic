@@ -133,7 +133,6 @@ def visualize_data(group_division):
         variance = sum(deviations) / 5
         sd = math.sqrt(variance)
         all_sd.append(sd)
-        all_deviations.extend(deviations)
         all_mean.append(ind_mean)
 
         #z_score = [(each - ind_mean) / sd for each in ind_cgpa]
@@ -145,9 +144,13 @@ def visualize_data(group_division):
         print()
     
     total_mean = sum(all_mean) / len(all_mean)
+    population_deviations = [(each-total_mean)**2 for each in all_mean]
+    population_sd = math.sqrt (sum(population_deviations) / len(all_mean))
 
-    for i,j in zip(all_mean,all_sd):
-        z_score = (i-total_mean) / j
+    print(f"The standard deviation of the population is {population_sd:.5f}")
+
+    for i in all_mean:
+        z_score = (i - total_mean) / population_sd
         compiled_z_score.append(z_score)
 
     print (f"compiled z score list: {compiled_z_score}")
