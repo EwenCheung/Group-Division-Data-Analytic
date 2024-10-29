@@ -114,31 +114,39 @@ def division_into_team(students_list):
 
 
 def visualize_data(group_division):
-    total_sd = []
-    total_deviations = []
+    all_sd = []
+    all_deviations = []
+    all_mean = []
     compiled_z_score = []
 
     for i, x in enumerate(group_division):
         print(f"Group {i}")
         total_cgpa = 0
-        icgpa = []
+        ind_cgpa = []
         for j in x:
             print(j["Student ID"], j["School"], j["CGPA"])
             total_cgpa += j["CGPA"]
-            icgpa.append(j["CGPA"])
+            ind_cgpa.append(j["CGPA"])
 
-        mean = total_cgpa / 5
-        deviations = [(each-mean)**2 for each in icgpa]
+        ind_mean = total_cgpa / 5
+        deviations = [(each-ind_mean)**2 for each in ind_cgpa]
         variance = sum(deviations) / 5
         sd = math.sqrt(variance)
-        total_sd.append(sd)
-        total_deviations.extend(deviations)
-        
-        z_score = [(each - mean) / sd for each in icgpa]
-        compiled_z_score.extend(z_score)
+        all_sd.append(sd)
+        all_deviations.extend(deviations)
+        all_mean.append(ind_mean)
 
-        print(f"The mean cgpa of this group is {mean}\nThe variance of this group is {variance:.5f}\nThe standard deviation of this group is {sd:.5f}")
+        #z_score = [(each - ind_mean) / sd for each in ind_cgpa]
+        #compiled_z_score.extend(z_score)
+
+        print(f"The mean cgpa of this group is {ind_mean}\nThe variance of this group is {variance:.5f}\nThe standard deviation of this group is {sd:.5f}")
         print()
+    
+    total_mean = sum(all_mean) / len(all_mean)
+
+    for i,j in zip(all_mean,all_sd):
+        z_score = (i-total_mean) / j
+        compiled_z_score.append(z_score)
 
     print (f"compiled z score list: {compiled_z_score}")
 
