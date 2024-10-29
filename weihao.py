@@ -139,7 +139,9 @@ def visualize_data(group_division):
         #z_score = [(each - ind_mean) / sd for each in ind_cgpa]
         #compiled_z_score.extend(z_score)
 
-        print(f"The mean cgpa of this group is {ind_mean}\nThe variance of this group is {variance:.5f}\nThe standard deviation of this group is {sd:.5f}")
+        print(f"The mean CGPA of this group is {ind_mean:.2f}")
+        print(f"The variance of this group is {variance:.5f}")
+        print(f"The standard deviation of this group is {sd:.5f}")
         print()
     
     total_mean = sum(all_mean) / len(all_mean)
