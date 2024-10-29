@@ -27,13 +27,14 @@ def pick_student(all_students, tut_grp):
     return students_list
 
 
-def diverse_team(size_team, sorted_student_more, sorted_student_less):  # size of team, index(0,-1,or middle)
+def diverse_team(size_team, sorted_student_more, sorted_student_less,team_index,len_team):  # size of team, index(0,-1,or middle)
     team = []
     i = 0  # round
     sorted_student = [sorted_student_more, sorted_student_less]
 
     gender_run_two_time = False
-    if size_team % 2 == 0 and len(sorted_student_more) - len(sorted_student_less) >= size_team / 2:
+    next_gender_same = False
+    if len(sorted_student_more) - len(sorted_student_less) >= ((((team_size//2)+1)*len_team) -((team_size//2)*len_team))-team_index:
         gender_run_two_time = True
 
     gender_index = 0
@@ -68,12 +69,19 @@ def diverse_team(size_team, sorted_student_more, sorted_student_less):  # size o
                 break
 
         i += 1
-        gender_index += 1
+        if not next_gender_same:
+            gender_index += 1
+        elif next_gender_same:
+            next_gender_same = False
         if i > 2:
             i = 0
-        if gender_index > 1 or gender_run_two_time:
+        if gender_index > 1:
+            gender_index = 0
+
+        if gender_run_two_time:
             gender_index = 0
             gender_run_two_time = False
+            next_gender_same = True
 
     return team
 
@@ -93,10 +101,10 @@ def division_into_team(students_list, size):
 
     while team_index < len(teams):  # while haven't added student into all teams
         if len(male_sorted_students) >= len(female_sorted_students):  # if remain male student more than remain female student
-            teams[team_index] = diverse_team(size, male_sorted_students, female_sorted_students)
+            teams[team_index] = diverse_team(size, male_sorted_students, female_sorted_students,team_index,len(teams))
 
         else:  # if remain male student less than remain female student
-            teams[team_index] = diverse_team(size, female_sorted_students, male_sorted_students)
+            teams[team_index] = diverse_team(size, female_sorted_students, male_sorted_students,team_index,len(teams))
 
         team_index += 1
 

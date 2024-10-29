@@ -27,10 +27,15 @@ def pick_student(all_students, tut_grp):
     return students_list
 
 
-def diverse_team(sorted_student_more, sorted_student_less):  # index(0,-1,or middle)
+def diverse_team(sorted_student_more, sorted_student_less, team_index):  # index(0,-1,or middle)
     team = []
     i = 0  # round
     sorted_student = [sorted_student_more, sorted_student_less]
+
+    gender_run_two_time = False
+    next_gender_same = False
+    if len(sorted_student_more) - len(sorted_student_less) >= 10-team_index:
+        gender_run_two_time = True
 
     gender_index = 0
 
@@ -64,11 +69,19 @@ def diverse_team(sorted_student_more, sorted_student_less):  # index(0,-1,or mid
                 break
 
         i += 1
-        gender_index += 1
+        if not next_gender_same:
+            gender_index += 1
+        elif next_gender_same:
+            next_gender_same = False
         if i > 2:
             i = 0
         if gender_index > 1:
             gender_index = 0
+
+        if gender_run_two_time:
+            gender_index = 0
+            gender_run_two_time = False
+            next_gender_same = True
 
     return team
 
@@ -88,10 +101,10 @@ def division_into_team(students_list):
 
     while team_index < len(teams):  # while haven't added student into all teams
         if len(male_sorted_students) >= len(female_sorted_students):  # if remain male student more than remain female student
-            teams[team_index] = diverse_team(male_sorted_students, female_sorted_students)
+            teams[team_index] = diverse_team(male_sorted_students, female_sorted_students, team_index)
 
         else:  # if remain male student less than remain female student
-            teams[team_index] = diverse_team(female_sorted_students, male_sorted_students)
+            teams[team_index] = diverse_team(female_sorted_students, male_sorted_students, team_index)
 
         team_index += 1
 
