@@ -100,7 +100,7 @@ def see_group_division(group_division):
         deviations = [(each-mean)**2 for each in icgpa]
         variance = sum(deviations) / 5
         sd = math.sqrt(variance)
-        print(f"The mean cgpa of this group is {mean}\nThe variance of this group is {variance}\nThe standard deviation of this group is {sd}")
+        print(f"The mean cgpa of this group is {mean}\nThe variance of this group is {variance:.5f}\nThe standard deviation of this group is {sd:.5f}")
         print()
 
 
