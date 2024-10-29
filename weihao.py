@@ -91,15 +91,16 @@ def visualize_data(group_division):
         sd = math.sqrt(variance)
         total_sd.append(sd)
         total_deviations.extend(deviations)
+        
+        z_score = [(each - mean) / sd for each in icgpa]
+        compiled_z_score.extend(z_score)
 
         print(f"The mean cgpa of this group is {mean}\nThe variance of this group is {variance:.5f}\nThe standard deviation of this group is {sd:.5f}")
         print()
 
-    for eachd, eachsd in total_deviations, total_sd:
-        z_score = eachd / eachsd
-        compiled_z_score.append(z_score)
-
     print (f"compiled z score list: {compiled_z_score}")
+
+visualize_data(group_division)
 
 # while tutorial_grp <= 150:
 #     group_division.extend(division_into_teams(students, tutorial_grp, team_size))
