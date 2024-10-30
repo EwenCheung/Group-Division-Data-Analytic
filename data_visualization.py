@@ -1,3 +1,5 @@
+import matplotlib.pyplot as plt
+
 def read_student_data(file_path):
     """Read data from csv file and return"""
     students_list = []
