@@ -110,21 +110,23 @@ def division_into_team(students_list):
 
     return teams
 
-
 def visualize_data(group_division):
     all_sd = []
     all_deviations = []
     all_mean = []
     compiled_z_score = []
+    compiled_gender = []
 
     for i, x in enumerate(group_division):
         print(f"Group {i}")
         total_cgpa = 0
         ind_cgpa = []
+        ind_gender = []
         for j in x:
-            print(j["Student ID"], j["School"], j["CGPA"])
+            print(j["Student ID"], j["School"], j["CGPA"],j["Gender"])
             total_cgpa += j["CGPA"]
             ind_cgpa.append(j["CGPA"])
+            ind_gender.append(j["Gender"])
 
         ind_mean = total_cgpa / 5
         deviations = [(each-ind_mean)**2 for each in ind_cgpa]
@@ -132,6 +134,8 @@ def visualize_data(group_division):
         sd = (variance)**0.5
         all_sd.append(sd)
         all_mean.append(ind_mean)
+
+        compiled_gender.append(ind_gender)
 
         #z_score = [(each - ind_mean) / sd for each in ind_cgpa]
         #compiled_z_score.extend(z_score)
@@ -147,6 +151,7 @@ def visualize_data(group_division):
     
     print(f"The mean of the population is {total_mean:.2f}")
     print(f"The standard deviation of the population is {population_sd:.5f}")
+    print(f"Compiled Gender: {compiled_gender}")
 
     for i in all_mean:
         z_score = (i - total_mean) / population_sd
