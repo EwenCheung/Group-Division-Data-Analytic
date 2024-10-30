@@ -1,5 +1,3 @@
-import math
-
 def read_student_data(file_path):
     """Read data from csv file and return"""
     students_list = []
@@ -131,7 +129,7 @@ def visualize_data(group_division):
         ind_mean = total_cgpa / 5
         deviations = [(each-ind_mean)**2 for each in ind_cgpa]
         variance = sum(deviations) / 5
-        sd = math.sqrt(variance)
+        sd = (variance)**0.5
         all_sd.append(sd)
         all_mean.append(ind_mean)
 
@@ -145,9 +143,9 @@ def visualize_data(group_division):
     
     total_mean = sum(all_mean) / len(all_mean)
     population_deviations = [(each-total_mean)**2 for each in all_mean]
-    population_sd = math.sqrt (sum(population_deviations) / len(all_mean))
-
-	print(f"The mean of the population is {mean:.2f}")
+    population_sd = (sum(population_deviations) / len(all_mean))**0.5
+    
+    print(f"The mean of the population is {total_mean:.2f}")
     print(f"The standard deviation of the population is {population_sd:.5f}")
 
     for i in all_mean:
