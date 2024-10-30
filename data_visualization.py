@@ -159,6 +159,27 @@ def visualize_data(group_division):
 
     print (f"compiled z score list: {compiled_z_score}")
 
+    count_gender = {'m5f0' : 0, 'm4f1' : 0, 'm3f2' : 0, 'm2f3' : 0, 'm1f4': 0, 'm0f5' : 0}
+    for y in compiled_gender:
+        count = 0
+        for gender in y:
+            if gender == "Male":
+                count += 1
+        if count == 0:
+            count_gender['m0f5'] += 1
+        elif count == 1:
+            count_gender['m1f4'] += 1
+        elif count == 2:
+            count_gender['m2f3'] += 1
+        elif count == 3:
+            count_gender['m3f2'] += 1
+        elif count == 4:
+            count_gender['m4f1'] += 1
+        elif count == 5:
+            count_gender['m5f0'] += 1
+    
+    print(f"Gender count {count_gender}")
+
 students = read_student_data('records.csv')
 group_division = []
 tutorial_grp = 1
