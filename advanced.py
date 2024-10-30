@@ -34,7 +34,7 @@ def diverse_team(size_team, sorted_student_more, sorted_student_less,team_index,
 
     gender_run_two_time = False
     next_gender_same = False
-    if len(sorted_student_more) - len(sorted_student_less) >= ((((team_size//2)+1)*len_team) -((team_size//2)*len_team))-team_index:
+    if (size_team%2 == 0) or len(sorted_student_more) - len(sorted_student_less) >= ((((size_team//2)+1)*len_team) -((size_team//2)*len_team))-team_index:
         gender_run_two_time = True
 
     gender_index = 0
