@@ -172,6 +172,32 @@ def visualize_data(group_division):
         count_gender[f'm{count}f{5-count}'] += 1
     print(f"Gender count {count_gender}")
 
+    # Data for the bar chart (this to visualizie the count_gender dict)
+    labels = list(count_gender.keys())  # Category labels like 'm5f0', 'm4f1', etc.
+    frequencies = list(count_gender.values())  # Corresponding frequencies for each category
+    
+    # Plotting the bar chart
+    fig, ax = plt.subplots(figsize=(10, 6))
+    
+    # Create the bar chart
+    bars = ax.bar(labels, frequencies, color='skyblue')
+    
+    # Adding titles and labels
+    ax.set_title("Frequency of Gender Composition in Teams")
+    ax.set_xlabel("Gender Composition (e.g., m5f0 means 5 males, 0 females)")
+    ax.set_ylabel("Number of Teams")
+    
+    # Adding frequency labels on top of each bar
+    for bar in bars:
+        yval = bar.get_height()  # Get the height of each bar
+        ax.text(bar.get_x() + bar.get_width() / 2, yval, int(yval), ha='center', va='bottom')
+    
+    # Display the chart
+    plt.xticks(rotation=45)
+    plt.show()
+
+
+
 students = read_student_data('records.csv')
 group_division = []
 tutorial_grp = 1
