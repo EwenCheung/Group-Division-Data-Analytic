@@ -146,8 +146,8 @@ def visualize_data(group_division):
     total_mean = sum(all_mean) / len(all_mean)
     population_deviations = [(each-total_mean)**2 for each in all_mean]
     population_sd = math.sqrt (sum(population_deviations) / len(all_mean))
-    
-    print(f"The mean of the population is {total_mean:.2f}")
+
+	print(f"The mean of the population is {mean:.2f}")
     print(f"The standard deviation of the population is {population_sd:.5f}")
 
     for i in all_mean:
