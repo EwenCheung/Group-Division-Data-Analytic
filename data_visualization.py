@@ -116,17 +116,20 @@ def visualize_data(group_division):
     all_mean = []
     compiled_z_score = []
     compiled_gender = []
+    compiled_school =[]
 
     for i, x in enumerate(group_division):
         print(f"Group {i}")
         total_cgpa = 0
         ind_cgpa = []
         ind_gender = []
+        ind_school =[]
         for j in x:
-            print(j["Student ID"], j["School"], j["CGPA"],j["Gender"])
+            #print(j["Student ID"], j["School"], j["CGPA"],j["Gender"])
             total_cgpa += j["CGPA"]
             ind_cgpa.append(j["CGPA"])
             ind_gender.append(j["Gender"])
+            ind_school.append(j["School"])
 
         ind_mean = total_cgpa / 5
         deviations = [(each-ind_mean)**2 for each in ind_cgpa]
@@ -136,13 +139,14 @@ def visualize_data(group_division):
         all_mean.append(ind_mean)
 
         compiled_gender.append(ind_gender)
+        compiled_school.append(ind_school)
 
         #z_score = [(each - ind_mean) / sd for each in ind_cgpa]
         #compiled_z_score.extend(z_score)
 
-        print(f"The mean CGPA of this group is {ind_mean:.2f}")
-        print(f"The variance of this group is {variance:.5f}")
-        print(f"The standard deviation of this group is {sd:.5f}")
+        print(f"The mean CGPA of {i} group is {ind_mean:.2f}")
+        print(f"The variance of {i} group is {variance:.5f}")
+        print(f"The standard deviation of {i} group is {sd:.5f}")
         print()
     
     total_mean = sum(all_mean) / len(all_mean)
@@ -151,33 +155,21 @@ def visualize_data(group_division):
     
     print(f"The mean of the population is {total_mean:.2f}")
     print(f"The standard deviation of the population is {population_sd:.5f}")
-    print(f"Compiled Gender: {compiled_gender}")
+    #print(f"Compiled Gender: {compiled_gender}")
+    #print (f"compiled school list: {compiled_school}")
 
     for i in all_mean:
         z_score = (i - total_mean) / population_sd
         compiled_z_score.append(z_score)
 
-    print (f"compiled z score list: {compiled_z_score}")
+    #print (f"compiled z score list: {compiled_z_score}")
 
     count_gender = {'m5f0' : 0, 'm4f1' : 0, 'm3f2' : 0, 'm2f3' : 0, 'm1f4': 0, 'm0f5' : 0}
-    for y in compiled_gender:
-        count = 0
-        for gender in y:
-            if gender == "Male":
-                count += 1
-        if count == 0:
-            count_gender['m0f5'] += 1
-        elif count == 1:
-            count_gender['m1f4'] += 1
-        elif count == 2:
-            count_gender['m2f3'] += 1
-        elif count == 3:
-            count_gender['m3f2'] += 1
-        elif count == 4:
-            count_gender['m4f1'] += 1
-        elif count == 5:
-            count_gender['m5f0'] += 1
-    
+    for teamg in compiled_gender:
+        count = sum(1 for gender in teamg if gender == "Male")
+        if count > 5:
+            count = 5
+        count_gender[f'm{count}f{5-count}'] += 1
     print(f"Gender count {count_gender}")
 
 students = read_student_data('records.csv')
