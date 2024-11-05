@@ -118,7 +118,7 @@ def visualize_data(group_division):
     all_mean = []
     compiled_z_score = []
     compiled_gender = []
-    compiled_school =[]
+    unique_school_counts = []
 
     for i, x in enumerate(group_division):
         print(f"Group {i}")
@@ -139,9 +139,10 @@ def visualize_data(group_division):
         sd = (variance)**0.5
         all_sd.append(sd)
         all_mean.append(ind_mean)
+        schools_in_team = set(sch for sch in ind_school)  # Use a set to get unique schools
+        unique_school_counts.append(len(schools_in_team))  # Count of unique schools
 
         compiled_gender.append(ind_gender)
-        compiled_school.append(ind_school)
 
         #z_score = [(each - ind_mean) / sd for each in ind_cgpa]
         #compiled_z_score.extend(z_score)
@@ -155,10 +156,11 @@ def visualize_data(group_division):
     population_deviations = [(each-total_mean)**2 for each in all_mean]
     population_sd = (sum(population_deviations) / len(all_mean))**0.5
     
+    
     print(f"The mean of the population is {total_mean:.2f}")
     print(f"The standard deviation of the population is {population_sd:.5f}")
     #print(f"Compiled Gender: {compiled_gender}")
-    #print (f"compiled school list: {compiled_school}")
+    #print (f"compiled school list: {unique_school_counts}")
 
     for i in all_mean:
         z_score = (i - total_mean) / population_sd
@@ -174,7 +176,7 @@ def visualize_data(group_division):
         count_gender[f'm{count}f{5-count}'] += 1
     print(f"Gender count {count_gender}")
 
-    # Data for the bar chart (this to visualizie the count_gender dict)
+    # Data for the bar chart (this to visualize the count_gender dict)
     labels = list(count_gender.keys())  # Category labels like 'm5f0', 'm4f1', etc.
     frequencies = list(count_gender.values())  # Corresponding frequencies for each category
     
@@ -196,6 +198,23 @@ def visualize_data(group_division):
     
     # Display the chart
     plt.xticks(rotation=45)
+    plt.show()
+
+    plt.figure(figsize=(10, 6))
+    counts, bins, patches = plt.hist(unique_school_counts, bins=range(1, max(unique_school_counts) + 2), 
+                                      color='skyblue', edgecolor='black', align='left')
+    
+    plt.xticks(range(1, max(unique_school_counts) + 1))  # Set x-ticks
+    plt.xlabel("Number of Unique Schools per Team")
+    plt.ylabel("Number of Teams")
+    plt.title("Distribution of Unique Schools in Teams")
+    plt.grid(axis='y', linestyle='--', alpha=0.7)
+
+    # Adding labels on top of each bar
+    for count, x in zip(counts, bins):
+        if count > 0:  # Only label if there's a bar
+            plt.text(x, count, int(count), ha='center', va='bottom')
+
     plt.show()
 
 
