@@ -1,35 +1,35 @@
-    import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 
-    def read_student_data(file_path):
-        """Read data from csv file and return"""
-        students_list = []
-        with open(file_path, mode='r') as file:
-            headers = file.readline().strip().split(",")
-            for line in file:
-                student = {}
-                values = line.strip().split(",")
-                for i, header in enumerate(headers):
-                    student[header.strip()] = values[i].strip()
-                    if header.strip() == "CGPA":
-                        student[header.strip()] = float(student[header.strip()])
+def read_student_data(file_path):
+    """Read data from csv file and return"""
+    students_list = []
+    with open(file_path, mode='r') as file:
+        headers = file.readline().strip().split(",")
+        for line in file:
+            student = {}
+            values = line.strip().split(",")
+            for i, header in enumerate(headers):
+                student[header.strip()] = values[i].strip()
+                if header.strip() == "CGPA":
+                    student[header.strip()] = float(student[header.strip()])
 
-                students_list.append(student)
+            students_list.append(student)
 
-        return students_list
-
-
-    def pick_student(all_students, tut_grp):
-        """pick student out from the tutorial group"""
-        students_list = []
-
-        for student in all_students:
-            if student['Tutorial Group'] == f'G-{tut_grp}':
-                students_list.append(student)
-
-        return students_list
+    return students_list
 
 
-    def diverse_team(sorted_student_more, sorted_student_less, team_index):  # index(0,-1,or middle)
+def pick_student(all_students, tut_grp):
+    """pick student out from the tutorial group"""
+    students_list = []
+
+    for student in all_students:
+        if student['Tutorial Group'] == f'G-{tut_grp}':
+            students_list.append(student)
+
+    return students_list
+
+
+def diverse_team(sorted_student_more, sorted_student_less, team_index):  # index(0,-1,or middle)
         team = []
         i = 0  # round
         sorted_student = [sorted_student_more, sorted_student_less]
@@ -85,10 +85,10 @@
                 gender_run_two_time = False
                 next_gender_same = True
 
-        return team
+        return team   
 
 
-    def division_into_team(students_list):
+def division_into_team(students_list):
         """Divides student from student_list into group of 5 with balance of cgpa and gender, and diverse of school"""
         # Separate male and female students into two lists
         male_students = [student for student in students_list if student['Gender'] == 'Male']
@@ -112,7 +112,7 @@
 
         return teams
 
-    def visualize_data(group_division):
+def visualize_data(group_division):
         all_sd = []
         all_deviations = []
         all_mean = []
@@ -127,7 +127,6 @@
             ind_gender = []
             ind_school =[]
             for j in x:
-                #print(j["Student ID"], j["School"], j["CGPA"],j["Gender"])
                 total_cgpa += j["CGPA"]
                 ind_cgpa.append(j["CGPA"])
                 ind_gender.append(j["Gender"])
@@ -144,8 +143,6 @@
 
             compiled_gender.append(ind_gender)
 
-            #z_score = [(each - ind_mean) / sd for each in ind_cgpa]
-            #compiled_z_score.extend(z_score)
 
             print(f"The mean CGPA of {i} group is {ind_mean:.2f}")
             print(f"The variance of {i} group is {variance:.5f}")
@@ -159,14 +156,10 @@
         
         print(f"The mean of the population is {total_mean:.2f}")
         print(f"The standard deviation of the population is {population_sd:.5f}")
-        #print(f"Compiled Gender: {compiled_gender}")
-        #print (f"compiled school list: {unique_school_counts}")
 
         for i in all_mean:
             z_score = (i - total_mean) / population_sd
             compiled_z_score.append(z_score)
-
-        #print (f"compiled z score list: {compiled_z_score}")
 
         count_gender = {'m5f0' : 0, 'm4f1' : 0, 'm3f2' : 0, 'm2f3' : 0, 'm1f4': 0, 'm0f5' : 0}
         for teamg in compiled_gender:
@@ -265,20 +258,17 @@
 
 
 
+students = read_student_data('records.csv')
+group_division = []
+tutorial_grp = 1
 
-
-
-    students = read_student_data('records.csv')
-    group_division = []
-    tutorial_grp = 1
-
-    while tutorial_grp <= 150:
+while tutorial_grp <= 150:
         group_division.extend(division_into_team(pick_student(students, tutorial_grp)))
         tutorial_grp += 1
 
-    visualize_data(group_division)
+visualize_data(group_division)
 
-    with open("group-base.txt", mode="w") as f:
+with open("group-base.txt", mode="w") as f:
         for i, x in enumerate(group_division):
             f.write(f"Group {i}\n")
             cgpa = 0
@@ -287,4 +277,4 @@
                 f.write(l)
                 cgpa += j["CGPA"]
             f.write(f" the mean cgpa of this group is {cgpa / len(x)}\n")
-            f.write("\n")
+            f.write("\n")      
