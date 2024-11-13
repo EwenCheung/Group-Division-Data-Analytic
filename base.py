@@ -132,13 +132,10 @@ while tutorial_grp <= 150:
 
 see_group_division(group_division)
 
-with open("group-base.txt", mode="w") as f:
-    for i, x in enumerate(group_division):
-        f.write(f"Group {i}\n")
-        cgpa = 0
-        for j in x:
-            l = f"{j['Student ID'], j['School'], j['CGPA'], j['Gender']}\n"
+with open("group_division.csv", mode="w") as f:
+    f.write("Tutorial Group,Group Number,Student ID,School,Name,Gender,CGPA\n")
+
+    for group_num, group in enumerate(group_division,start=1):
+        for student in group:
+            l = f"{student['Tutorial Group']},{group_num},{student['Student ID']},{student['School']},{student['Name']},{student['Gender']},{student['CGPA']}\n"
             f.write(l)
-            cgpa += j["CGPA"]
-        f.write(f" the mean cgpa of this group is {cgpa / len(x)}\n")
-        f.write("\n")
