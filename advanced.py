@@ -145,35 +145,20 @@ def division_into_team(students_list, size):
     return teams
 
 
-def see_group_division(group_div):
-    for i, x in enumerate(group_div):
-        print(f"Group {i}")
-        cgpa = 0
-        for j in x:
-            print(j["Student ID"], j["School"], j["CGPA"], j["Gender"])
-            cgpa += j["CGPA"]
-        print(f" the mean cgpa of this group is {cgpa / len(x)}")
-        print()
-
-
 students = read_student_data('records.csv')
 group_division = []
 tutorial_grp = 1
 team_size = 5  # can adjust
 
-while tutorial_grp <= 150:
+while tutorial_grp <= 120:
     group_division.extend(division_into_team(pick_student(students, tutorial_grp), team_size))
     tutorial_grp += 1
 
-see_group_division(group_division)
 
-with open("group-advanced.txt", mode="w") as f:
-    for i, x in enumerate(group_division):
-        f.write(f"Group {i}\n")
-        cgpa = 0
-        for j in x:
-            l = f"{j['Student ID'], j['School'], j['CGPA'], j['Gender']}\n"
+with open("group_division.csv", mode="w") as f:
+    f.write("Tutorial Group,Group Number,Student ID,School,Name,Gender,CGPA\n")
+
+    for group_num, group in enumerate(group_division,start=1):
+        for student in group:
+            l = f"{student['Tutorial Group']},{group_num},{student['Student ID']},{student['School']},{student['Name']},{student['Gender']},{student['CGPA']}\n"
             f.write(l)
-            cgpa += j["CGPA"]
-        f.write(f" the mean cgpa of this group is {cgpa / len(x)}\n")
-        f.write("\n")

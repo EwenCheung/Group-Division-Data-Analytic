@@ -146,7 +146,7 @@ def visualize_data(group_division):
         ind_mean = total_cgpa / 5  # individual group mean CGPA
         deviations = [(each - ind_mean) ** 2 for each in ind_cgpa]
         variance = sum(deviations) / 5
-        sd = (variance) ** 0.5
+        sd = variance ** 0.5
         all_sd.append(sd)
         all_mean.append(ind_mean)
 
@@ -185,18 +185,18 @@ def visualize_data(group_division):
     show_graph_gender(count_gender)  # bar graph for count_gender dict
     show_graph_school(unique_school_counts)  # bar graph for sch repre
     # show_graph_CGPA(related_list,title,window_title,xlabel,ylabel,color_for_bins):
-    show_graph_CGPA(all_mean, "Histogram of Mean CGPA per Team",
+    show_graph_cgpa(all_mean, "Histogram of Mean CGPA per Team",
                     "Histogram_for_Mean_CGPA_Per_Team",
                     "Mean cGPA",
                     "Frequency",
                     "red")
 
-    show_graph_CGPA(all_sd, "Histogram of Standard Deviation per Team",
+    show_graph_cgpa(all_sd, "Histogram of Standard Deviation per Team",
                     "Histogram_for_Standard_Deviation_Per_Team",
                     "Standard Deviation",
                     "Frequency",
                     "blue")
-    show_graph_CGPA(compiled_z_score, "Histogram of Z-Scores for Mean CGPA per Team",
+    show_graph_cgpa(compiled_z_score, "Histogram of Z-Scores for Mean CGPA per Team",
                     "Histogram_of_Z-Scores_for_Mean_CGPA_per_Team",
                     "Z-Score",
                     "Frequency",
@@ -252,7 +252,7 @@ def show_graph_school(unique_school_counts):
     fig.savefig("assets/school_representation.png")
 
 
-def show_graph_CGPA(related_list, title, window_title, xlabel, ylabel, color_for_bins):
+def show_graph_cgpa(related_list, title, window_title, xlabel, ylabel, color_for_bins):
     fig = plt.figure(figsize=(10, 6))
     fig.canvas.manager.set_window_title(window_title)
     counts, bins, patches = plt.hist(related_list, bins=10, color=color_for_bins, edgecolor='black', alpha=0.7)
