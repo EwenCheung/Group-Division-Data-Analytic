@@ -145,15 +145,19 @@ def division_into_team(students_list, size):
     return teams
 
 
-students = read_student_data('records.csv')
-group_division = []
-tutorial_grp = 1
-team_size = 5  # can adjust
+def main(team_size):
+    students = read_student_data('records.csv')
+    group_division = []
+    tutorial_grp = 1
 
-while tutorial_grp <= 120:
-    group_division.extend(division_into_team(pick_student(students, tutorial_grp), team_size))
-    tutorial_grp += 1
+    while tutorial_grp <= 120:
+        group_division.extend(division_into_team(pick_student(students, tutorial_grp), team_size))
+        tutorial_grp += 1
 
+    return group_division
+
+team_size = 5 # can adjust
+group_division = main(team_size)
 
 with open("group_division.csv", mode="w") as f:
     f.write("Tutorial Group,Group Number,Student ID,School,Name,Gender,CGPA\n")
