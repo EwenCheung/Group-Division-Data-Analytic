@@ -117,13 +117,14 @@ def division_into_team(students_list):
 
 def visualize_data(group_division):
     all_sd = []
+    all_deviations = []
     all_mean = []
     compiled_z_score = []
     compiled_gender = []
     unique_school_counts = []
 
     for i, x in enumerate(group_division):
-        print(f"Team {i+1}")
+        print(f"Team {i}")
         total_cgpa = 0
         ind_cgpa = []
         ind_gender = []
@@ -142,17 +143,17 @@ def visualize_data(group_division):
         unique_school_counts.append(len(schools_in_team))  # Count of unique schools
 
         # for categorisation for CGPA
-        ind_mean = total_cgpa / len(ind_cgpa)  # individual team mean CGPA
+        ind_mean = total_cgpa / 5  # individual group mean CGPA
         deviations = [(each - ind_mean) ** 2 for each in ind_cgpa]
-        variance = sum(deviations) / len(ind_cgpa)
+        variance = sum(deviations) / 5
         sd = variance ** 0.5
         all_sd.append(sd)
         all_mean.append(ind_mean)
 
-        # printing of cgPA values for each team
-        print(f"The mean CGPA of team {i+1}  is {ind_mean:.2f}")
-        print(f"The variance of team {i+1}  is {variance:.5f}")
-        print(f"The standard deviation of team {i+1}  is {sd:.5f}")
+        # printing of cgPA values for each group
+        print(f"The mean CGPA of team {i}  is {ind_mean:.2f}")
+        print(f"The variance of team {i}  is {variance:.5f}")
+        print(f"The standard deviation of team {i}  is {sd:.5f}")
         print()
 
     # comparing individual team's mean, sd to observe the disparity in CGPA between each team and the population
@@ -171,11 +172,12 @@ def visualize_data(group_division):
 
     # dictionary to hold self-defined variable for gender categorisation and its count per category
     count_gender = {'m5f0': 0, 'm4f1': 0, 'm3f2': 0, 'm2f3': 0, 'm1f4': 0, 'm0f5': 0}
-    #count_gender = {}
     for teamg in compiled_gender:
         count = sum(1 for gender in teamg if gender == "Male")
+        if count > 5:
+            count = 5
         count_gender[f'm{count}f{5 - count}'] += 1
-    print(f"Gender count: {count_gender}")
+    print(f"Gender count {count_gender}")
 
     # Visualisation
     os.makedirs("assets", exist_ok=True)  # make assets folder if it doesnt exist
@@ -272,7 +274,7 @@ students = read_student_data('records.csv')
 group_division = []
 tutorial_grp = 1
 
-while tutorial_grp <= 120:
+while tutorial_grp <= 150:
     group_division.extend(division_into_team(pick_student(students, tutorial_grp)))
     tutorial_grp += 1
 
