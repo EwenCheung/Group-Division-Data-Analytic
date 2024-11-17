@@ -219,7 +219,7 @@ def visualize_data(group_division):
         female_count = len(teamgender) - male_count  # female count is total team size - male count
 
         # Print the team number with male and female counts
-        print(f"Team {team_number}: {male_count} males, {female_count} females")
+        #print(f"Team {team_number}: {male_count} males, {female_count} females")
 
         # Create the key based on the number of males and females
         gender_key = f'm{male_count}f{female_count}'  # Key in the form of mXfY
