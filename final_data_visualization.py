@@ -175,9 +175,9 @@ def visualize_data(group_division):
         unique_school_counts.append(len(schools_in_team))  # Count of unique schools
 
         # for categorisation for CGPA
-        ind_mean = total_cgpa / 5  # individual group mean CGPA
+        ind_mean = total_cgpa / len(ind_cgpa)  # individual group mean CGPA
         deviations = [(each - ind_mean) ** 2 for each in ind_cgpa]
-        variance = sum(deviations) / 5
+        variance = sum(deviations) / len(ind_cgpa)
         sd = variance ** 0.5
         all_sd.append(sd)
         all_mean.append(ind_mean)
@@ -256,6 +256,25 @@ def visualize_data(group_division):
                     "Frequency",
                     "green")
 
+def show_graph_school(unique_school_counts):
+    fig = plt.figure(figsize=(10, 6))
+    fig.canvas.manager.set_window_title("Bar Graph for School Representation")
+    counts, bins, patches = plt.hist(unique_school_counts, bins=range(1, max(unique_school_counts) + 2),
+                                     color='skyblue', edgecolor='black', align='left')
+
+    plt.xticks(range(1, max(unique_school_counts) + 1))  # Set x-ticks
+    plt.xlabel("Number of Unique Schools per Team")
+    plt.ylabel("Number of Teams")
+    plt.title("Distribution of Unique Schools in Teams")
+    plt.grid(axis='y', linestyle='--', alpha=0.7)
+
+    # Adding labels on top of each bar
+    for count, x in zip(counts, bins):
+        if count > 0:  # Only label if there's a bar
+            plt.text(x, count, int(count), ha='center', va='bottom')
+
+    plt.show()
+    fig.savefig("assets/school_representation.png")
 
 def show_graph_gender(count_gender):
     # Data for the bar chart (this to visualize the count_gender dict)
@@ -283,28 +302,6 @@ def show_graph_gender(count_gender):
     plt.xticks(rotation=45)
     plt.show()
     fig.savefig("assets/gender_representation.png")
-
-
-def show_graph_school(unique_school_counts):
-    fig = plt.figure(figsize=(10, 6))
-    fig.canvas.manager.set_window_title("Bar Graph for School Representation")
-    counts, bins, patches = plt.hist(unique_school_counts, bins=range(1, max(unique_school_counts) + 2),
-                                     color='skyblue', edgecolor='black', align='left')
-
-    plt.xticks(range(1, max(unique_school_counts) + 1))  # Set x-ticks
-    plt.xlabel("Number of Unique Schools per Team")
-    plt.ylabel("Number of Teams")
-    plt.title("Distribution of Unique Schools in Teams")
-    plt.grid(axis='y', linestyle='--', alpha=0.7)
-
-    # Adding labels on top of each bar
-    for count, x in zip(counts, bins):
-        if count > 0:  # Only label if there's a bar
-            plt.text(x, count, int(count), ha='center', va='bottom')
-
-    plt.show()
-    fig.savefig("assets/school_representation.png")
-
 
 def show_graph_cgpa(related_list, title, window_title, xlabel, ylabel, color_for_bins):
     fig = plt.figure(figsize=(10, 6))
