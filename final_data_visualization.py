@@ -149,7 +149,6 @@ def division_into_team(students_list, size):
 
 def visualize_data(group_division):
     all_sd = []
-    all_deviations = []
     all_mean = []
     compiled_z_score = []
     compiled_gender = []
