@@ -1,7 +1,6 @@
 import matplotlib.pyplot as plt
 import os
 
-
 def read_student_data(file_path):
     """Read data from csv file and return"""
     students_list = []
@@ -31,19 +30,19 @@ def pick_student(all_students, tut_grp):
     return students_list
 
 
-def diverse_team(sorted_student_more, sorted_student_less, team_index):  # index(0,-1,or middle)
+def diverse_team(size_team, sorted_student_more, sorted_student_less,team_index,len_team):  # size of team, index(0,-1,or middle)
     team = []
     i = 0  # round
     sorted_student = [sorted_student_more, sorted_student_less]
 
     gender_run_two_time = False
     next_gender_same = False
-    if len(sorted_student_more) - len(sorted_student_less) >= 10 - team_index:
+    if (size_team%2 == 0) or len(sorted_student_more) - len(sorted_student_less) >= ((((size_team//2)+1)*len_team) -((size_team//2)*len_team))-team_index:
         gender_run_two_time = True
 
     gender_index = 0
 
-    while len(team) < 5 and (sorted_student[0] or sorted_student[1]):  # add student into team when teams is not full
+    while len(team) < size_team and (sorted_student[0] or sorted_student[1]):  # add student into team when teams is not full
         index_changes = [+1, -1, +1]
         pick_index = [0, -1, len(sorted_student[gender_index]) // 2]
         while True:
@@ -90,8 +89,8 @@ def diverse_team(sorted_student_more, sorted_student_less, team_index):  # index
     return team
 
 
-def division_into_team(students_list):
-    """Divides student from student_list into group of 5 with balance of cgpa and gender, and diverse of school"""
+def division_into_team(students_list, size):
+    """Divides student from student_list into group of size with balance of cgpa and gender, and diverse of school"""
     # Separate male and female students into two lists
     male_students = [student for student in students_list if student['Gender'] == 'Male']
     female_students = [student for student in students_list if student['Gender'] == 'Female']
@@ -100,20 +99,53 @@ def division_into_team(students_list):
     male_sorted_students = sorted(male_students, key=lambda student: student['CGPA'])
     female_sorted_students = sorted(female_students, key=lambda student: student['CGPA'])
 
-    teams = [[] for _ in range(len(students_list) // 5)]
+    teams = [[] for _ in range(len(students_list) // size)]
     team_index = 0
 
     while team_index < len(teams):  # while haven't added student into all teams
         if len(male_sorted_students) >= len(female_sorted_students):  # if remain male student more than remain female student
-            teams[team_index] = diverse_team(male_sorted_students, female_sorted_students, team_index)
+            teams[team_index] = diverse_team(size, male_sorted_students, female_sorted_students,team_index,len(teams))
 
         else:  # if remain male student less than remain female student
-            teams[team_index] = diverse_team(female_sorted_students, male_sorted_students, team_index)
+            teams[team_index] = diverse_team(size, female_sorted_students, male_sorted_students,team_index,len(teams))
 
         team_index += 1
 
-    return teams
+    first_run = True
+    while male_sorted_students or female_sorted_students:
+        for team in teams:
+            male = sum(1 for student in team if student['Gender'] == 'Male')
+            female = sum(1 for student in team if student['Gender'] == 'Female')
 
+            # Handle male students first
+            if male_sorted_students:
+                if male > female:
+                    continue
+                elif female > male:
+                    team.append(male_sorted_students.pop(0))
+                    continue
+                elif not first_run and male - female < 2:
+                    team.append(male_sorted_students.pop(0))
+                    continue
+
+            # Handle female students
+            if female_sorted_students:
+                if male > female:
+                    team.append(female_sorted_students.pop(0))
+                    continue
+                elif female > male:
+                    continue
+                elif not first_run and female - male < 2:
+                    team.append(female_sorted_students.pop(0))
+                    continue
+
+        if not first_run:
+            break
+
+        # Mark the first run complete
+        first_run = False
+
+    return teams
 
 def visualize_data(group_division):
     all_sd = []
@@ -170,14 +202,36 @@ def visualize_data(group_division):
     print(f"The mean of the population is {total_mean:.2f}")
     print(f"The standard deviation of the population is {population_sd:.5f}")
 
+    #for base.py only
     # dictionary to hold self-defined variable for gender categorisation and its count per category
-    count_gender = {'m5f0': 0, 'm4f1': 0, 'm3f2': 0, 'm2f3': 0, 'm1f4': 0, 'm0f5': 0}
-    for teamg in compiled_gender:
-        count = sum(1 for gender in teamg if gender == "Male")
-        if count > 5:
-            count = 5
-        count_gender[f'm{count}f{5 - count}'] += 1
-    print(f"Gender count {count_gender}")
+    #count_gender = {'m5f0': 0, 'm4f1': 0, 'm3f2': 0, 'm2f3': 0, 'm1f4': 0, 'm0f5': 0}
+    #for teamg in compiled_gender:
+    #    count = sum(1 for gender in teamg if gender == "Male")
+    #    if count > 5:
+    #        count = 5
+    #    count_gender[f'm{count}f{5 - count}'] += 1
+    #print(f"Gender count {count_gender}")
+
+    count_gender = {}
+
+    for team_number, teamgender in enumerate(compiled_gender, start=1):
+        male_count = sum(1 for gender in teamgender if gender == "Male")
+        female_count = len(teamgender) - male_count  # female count is total team size - male count
+
+        # Print the team number with male and female counts
+        print(f"Team {team_number}: {male_count} males, {female_count} females")
+
+        # Create the key based on the number of males and females
+        gender_key = f'm{male_count}f{female_count}'  # Key in the form of mXfY
+
+        if gender_key not in count_gender:
+            count_gender[gender_key] = 0
+    
+        # Update the count for the given key
+        count_gender[gender_key] += 1
+
+    # Output the final result
+    print(count_gender)
 
     # Visualisation
     os.makedirs("assets", exist_ok=True)  # make assets folder if it doesnt exist
@@ -269,24 +323,18 @@ def show_graph_cgpa(related_list, title, window_title, xlabel, ylabel, color_for
     plt.show()
     fig.savefig("assets/" + window_title + ".png")
 
+def main(team_size):
+    global group_division
+    students = read_student_data('records.csv')
+    group_division = []
+    tutorial_grp = 1
 
-students = read_student_data('records.csv')
-group_division = []
-tutorial_grp = 1
+    while tutorial_grp <= 120:
+        group_division.extend(division_into_team(pick_student(students, tutorial_grp), team_size))
+        tutorial_grp += 1
 
-while tutorial_grp <= 150:
-    group_division.extend(division_into_team(pick_student(students, tutorial_grp)))
-    tutorial_grp += 1
+    return group_division
 
+team_size = 5 # can adjust
+group_division = main(team_size)
 visualize_data(group_division)
-
-with open("group-base.txt", mode="w") as f:
-    for i, x in enumerate(group_division):
-        f.write(f"Group {i}\n")
-        cgpa = 0
-        for j in x:
-            l = f"{j['Student ID'], j['School'], j['CGPA'], j['Gender']}\n"
-            f.write(l)
-            cgpa += j["CGPA"]
-        f.write(f" the mean cgpa of this group is {cgpa / len(x)}\n")
-        f.write("\n")
