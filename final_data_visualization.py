@@ -191,6 +191,9 @@ def visualize_data(group_division):
     total_mean = sum(all_mean) / len(all_mean)
     population_deviations = [(each - total_mean) ** 2 for each in all_mean]
     population_sd = (sum(population_deviations) / len(all_mean)) ** 0.5
+    population_median = all_mean[len(all_mean)//2]
+
+    print(f"Population median is: {population_median}")
 
     # calculate z-score of every team
     for i in all_mean:
