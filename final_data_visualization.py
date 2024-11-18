@@ -213,19 +213,16 @@ def visualize_data(group_division):
 
     count_gender = {}
 
-    for team_number, teamgender in enumerate(compiled_gender, start=1):
+    for teamgender in compiled_gender:
         male_count = sum(1 for gender in teamgender if gender == "Male")
         female_count = len(teamgender) - male_count  # female count is total team size - male count
 
-        # Print the team number with male and female counts
-        #print(f"Team {team_number}: {male_count} males, {female_count} females")
-
         # Create the key based on the number of males and females
-        gender_key = f'm{male_count}f{female_count}'  # Key in the form of mXfY
+        gender_key = f'm{male_count}f{female_count}' # Key in the form of mXfY
 
         if gender_key not in count_gender:
             count_gender[gender_key] = 0
-    
+        
         # Update the count for the given key
         count_gender[gender_key] += 1
 
